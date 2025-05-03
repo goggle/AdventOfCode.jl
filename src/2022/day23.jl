@@ -21,12 +21,6 @@ function day23(input::String = readInput(joinpath(@__DIR__, "..", "..", "data", 
     return [p1, p2]
 end
 
-function Base.show(io::IO, M::Matrix{Char})
-    for i ∈ axes(M, 1)
-        println(join(M[i, :]))
-    end
-end
-
 function round!(elves::Set{CartesianIndex{2}}, roundnumber::Int)
     dir = Dict(
         "NW" => CartesianIndex(-1, -1),
