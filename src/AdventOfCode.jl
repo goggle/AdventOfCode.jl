@@ -7,7 +7,7 @@ using Printf
 include(joinpath(@__DIR__, "utils.jl"))
 
 # Years we have solutions for
-const YEARS = 2023:2024
+const YEARS = 2022:2024
 const DAYS_PER_YEAR = 1:25
 
 # Include year-specific modules
