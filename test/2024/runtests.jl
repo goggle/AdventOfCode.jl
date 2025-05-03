@@ -1,17 +1,4 @@
-using AdventOfCode.AOC2024
-# using Printf
-
 @testset "AOC2024" begin
-    # # Import the year module for direct testing
-    
-    # # Include individual day test files
-    # for day in 1:25
-    #     day_test_file = joinpath(@__DIR__, @sprintf("day%02d_tests.jl", day))
-    #     if isfile(day_test_file)
-    #         include(day_test_file)
-    #     end
-    # end
-
     @testset "Day 1" begin
         sample = "3   4\n" *
                  "4   3\n" *
@@ -19,8 +6,8 @@ using AdventOfCode.AOC2024
                  "1   3\n" *
                  "3   9\n" *
                  "3   3\n"
-        @test day01(sample) == [11, 31]
-        @test day01() == [1590491, 22588371]
+        @test AOC2024.day01(sample) == [11, 31]
+        @test AOC2024.day01() == [1590491, 22588371]
     end
 
     @testset "Day 2" begin
@@ -30,12 +17,12 @@ using AdventOfCode.AOC2024
                  "1 3 2 4 5\n" *
                  "8 6 4 4 1\n" *
                  "1 3 6 7 9\n"
-        @test day02(sample) == [2, 4]
-        @test day02() == [411, 465]
+        @test AOC2024.day02(sample) == [2, 4]
+        @test AOC2024.day02() == [411, 465]
     end
     
     @testset "Day 3" begin
-        @test day03() == [168539636, 97529391]
+        @test AOC2024.day03() == [168539636, 97529391]
     end
     
     @testset "Day 4" begin
@@ -49,8 +36,8 @@ using AdventOfCode.AOC2024
                  "SAXAMASAAA\n" *
                  "MAMMMXMMMM\n" *
                  "MXMXAXMASX\n"
-        @test day04(sample) == [18, 9]
-        @test day04() == [2344, 1815]
+        @test AOC2024.day04(sample) == [18, 9]
+        @test AOC2024.day04() == [2344, 1815]
     end
     
     @testset "Day 5" begin
@@ -82,8 +69,8 @@ using AdventOfCode.AOC2024
                  "75,97,47,61,53\n" *
                  "61,13,29\n" *
                  "97,13,75,29,47\n"
-        @test day05(sample) == [143, 123]
-        @test day05() == [6041, 4884]
+        @test AOC2024.day05(sample) == [143, 123]
+        @test AOC2024.day05() == [6041, 4884]
     end
     
     @testset "Day 6" begin
@@ -97,8 +84,8 @@ using AdventOfCode.AOC2024
                  "........#.\n" *
                  "#.........\n" *
                  "......#...\n"
-        @test day06(sample) == [41, 6]
-        @test day06() == [4602, 1703]
+        @test AOC2024.day06(sample) == [41, 6]
+        @test AOC2024.day06() == [4602, 1703]
     end
     
     @testset "Day 7" begin
@@ -111,8 +98,8 @@ using AdventOfCode.AOC2024
                  "192: 17 8 14\n" *
                  "21037: 9 7 18 13\n" *
                  "292: 11 6 16 20\n"
-        @test day07(sample) == [3749, 11387]
-        @test day07() == [2437272016585, 162987117690649]
+        @test AOC2024.day07(sample) == [3749, 11387]
+        @test AOC2024.day07() == [2437272016585, 162987117690649]
     end
     
     @testset "Day 8" begin
@@ -128,14 +115,14 @@ using AdventOfCode.AOC2024
                  ".........A..\n" *
                  "............\n" *
                  "............\n"
-        @test day08(sample) == [14, 34]
-        @test day08() == [252, 839]
+        @test AOC2024.day08(sample) == [14, 34]
+        @test AOC2024.day08() == [252, 839]
     end
     
     @testset "Day 9" begin
         sample = "2333133121414131402"
-        @test day09(sample) == [1928, 2858]
-        @test day09() == [6242766523059, 6272188244509]
+        @test AOC2024.day09(sample) == [1928, 2858]
+        @test AOC2024.day09() == [6242766523059, 6272188244509]
     end
     
     @testset "Day 10" begin
@@ -147,14 +134,14 @@ using AdventOfCode.AOC2024
                  "32019012\n" *
                  "01329801\n" *
                  "10456732\n"
-        @test day10(sample) == [36, 81]
-        @test day10() == [617, 1477]
+        @test AOC2024.day10(sample) == [36, 81]
+        @test AOC2024.day10() == [617, 1477]
     end
     
     @testset "Day 11" begin
         sample = "125 17"
-        @test day11(sample) == [55312, 65601038650482]
-        @test day11() == [198089, 236302670835517]
+        @test AOC2024.day11(sample) == [55312, 65601038650482]
+        @test AOC2024.day11() == [198089, 236302670835517]
     end
     
     @testset "Day 12" begin
@@ -168,8 +155,8 @@ using AdventOfCode.AOC2024
                  "MIIIIIJJEE\n" *
                  "MIIISIJEEE\n" *
                  "MMMISSJEEE\n"
-        @test day12(sample) == [1930, 1206]
-        @test day12() == [1304764, 811148]
+        @test AOC2024.day12(sample) == [1930, 1206]
+        @test AOC2024.day12() == [1304764, 811148]
     end
     
     @testset "Day 13" begin
@@ -188,12 +175,12 @@ using AdventOfCode.AOC2024
                  "Button A: X+69, Y+23\n" *
                  "Button B: X+27, Y+71\n" *
                  "Prize: X=18641, Y=10279\n"
-        @test day13(sample) == [480, 875318608908]
-        @test day13() == [28138, 108394825772874]
+        @test AOC2024.day13(sample) == [480, 875318608908]
+        @test AOC2024.day13() == [28138, 108394825772874]
     end
     
     @testset "Day 14" begin
-        @test day14() == [221142636, 7916]
+        @test AOC2024.day14() == [221142636, 7916]
     end
     
     @testset "Day 15" begin
@@ -218,8 +205,8 @@ using AdventOfCode.AOC2024
                  "<><^^>^^^<><vvvvv^v<v<<>^v<v>v<<^><<><<><<<^^<<<^<<>><<><^^^>^^<>^>v<>" *
                  "^^>vv<^v^v<vv>^<><v<^v>^^^>>>^^vvv^>vvv<>>>^<^>>>>>^<<^v>^vvv<>^<><<v>" *
                  "v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^\n"
-        @test day15(sample) == [10092, 9021]
-        @test day15() == [1492518, 1512860]
+        @test AOC2024.day15(sample) == [10092, 9021]
+        @test AOC2024.day15() == [1492518, 1512860]
     end
     
     @testset "Day 16" begin
@@ -238,7 +225,7 @@ using AdventOfCode.AOC2024
                   "#.###.#.#.#.#.#\n" *
                   "#S..#.....#...#\n" *
                   "###############\n"
-        @test day16(sample1) == [7036, 45]
+        @test AOC2024.day16(sample1) == [7036, 45]
     
         sample2 = "#################\n" *
                   "#...#...#...#..E#\n" *
@@ -257,7 +244,7 @@ using AdventOfCode.AOC2024
                   "#.#.#.#########.#\n" *
                   "#S#.............#\n" *
                   "#################\n"
-        @test day16(sample2) == [11048, 64]
+        @test AOC2024.day16(sample2) == [11048, 64]
     
         sample3 = "################\n" *
                   "####.........#E#\n" *
@@ -270,7 +257,7 @@ using AdventOfCode.AOC2024
                   "#.#..#######.###\n" *
                   "#S##.........###\n" *
                   "################\n"
-        @test day16(sample3) == [9029, 62]
+        @test AOC2024.day16(sample3) == [9029, 62]
     
         sample4 = "#############\n" *
                   "#############\n" *
@@ -280,12 +267,12 @@ using AdventOfCode.AOC2024
                   "####.#.######\n" *
                   "####.....S###\n" *
                   "#############\n"
-        @test day16(sample4) == [4011, 17]
-        @test day16() == [105508, 548]
+        @test AOC2024.day16(sample4) == [4011, 17]
+        @test AOC2024.day16() == [105508, 548]
     end
     
     @testset "Day 17" begin
-        @test day17() == ["5,0,3,5,7,6,1,5,4", 164516454365621]
+        @test AOC2024.day17() == ["5,0,3,5,7,6,1,5,4", 164516454365621]
     end
     
     @testset "Day 18" begin
@@ -315,9 +302,9 @@ using AdventOfCode.AOC2024
                  "1,6\n" *
                  "2,0\n"
         data = [parse.(Int, split(x, ",")) for x ∈ split(rstrip(sample), "\n")]
-        @test AdventOfCode.AOC2024.Day18.reachable(data, 12; height=7, width=7)[2] == 22
-        @test AdventOfCode.AOC2024.Day18.part2(data; rindex=12, height=7, width=7) == "6,1"
-        @test day18() == [356, "22,33"]
+        @test AOC2024.Day18.reachable(data, 12; height=7, width=7)[2] == 22
+        @test AOC2024.Day18.part2(data; rindex=12, height=7, width=7) == "6,1"
+        @test AOC2024.day18() == [356, "22,33"]
     end
     
     @testset "Day 19" begin
@@ -331,12 +318,12 @@ using AdventOfCode.AOC2024
                  "bwurrg\n" *
                  "brgr\n" *
                  "bbrgwb\n"
-        @test day19(sample) == [6, 16]
-        @test day19() == [315, 625108891232249]
+        @test AOC2024.day19(sample) == [6, 16]
+        @test AOC2024.day19() == [315, 625108891232249]
     end
     
     @testset "Day 20" begin
-        @test day20() == [1411, 1010263]
+        @test AOC2024.day20() == [1411, 1010263]
     end
     
     @testset "Day 21" begin
@@ -345,8 +332,8 @@ using AdventOfCode.AOC2024
                  "179A\n" *
                  "456A\n" *
                  "379A\n"
-        @test day21(sample) == [126384, 154115708116294]
-        @test day21() == [163920, 204040805018350]
+        @test AOC2024.day21(sample) == [126384, 154115708116294]
+        @test AOC2024.day21() == [163920, 204040805018350]
     end
     
     @testset "Day 22" begin
@@ -354,15 +341,15 @@ using AdventOfCode.AOC2024
                  "10\n" *
                  "100\n" *
                  "2024\n"
-        @test day22(sample) == [37327623, 24]
+        @test AOC2024.day22(sample) == [37327623, 24]
     
         sample2 = "1\n" *
                   "2\n" *
                   "3\n" *
                   "2024\n"
-        @test day22(sample2) == [37990510, 23]
+        @test AOC2024.day22(sample2) == [37990510, 23]
     
-        @test day22() == [13185239446, 1501]
+        @test AOC2024.day22() == [13185239446, 1501]
     end
     
     @testset "Day 23" begin
@@ -398,12 +385,12 @@ using AdventOfCode.AOC2024
                  "wh-qp\n" *
                  "tb-vc\n" *
                  "td-yn\n"
-        @test day23(sample) == [7, "co,de,ka,ta"]
-        @test day23() == [1368, "dd,ig,il,im,kb,kr,pe,ti,tv,vr,we,xu,zi"]
+        @test AOC2024.day23(sample) == [7, "co,de,ka,ta"]
+        @test AOC2024.day23() == [1368, "dd,ig,il,im,kb,kr,pe,ti,tv,vr,we,xu,zi"]
     end
     
     @testset "Day 24" begin
-        @test day24() == [58367545758258, "bpf,fdw,hcc,hqc,qcw,z05,z11,z35"]
+        @test AOC2024.day24() == [58367545758258, "bpf,fdw,hcc,hqc,qcw,z05,z11,z35"]
     end
     
     @testset "Day 25" begin
@@ -446,7 +433,7 @@ using AdventOfCode.AOC2024
                  "#.#..\n" *
                  "#.#.#\n" *
                  "#####\n"
-        @test day25(sample) == 3
-        @test day25() == 3291
+        @test AOC2024.day25(sample) == 3
+        @test AOC2024.day25() == 3291
     end
 end

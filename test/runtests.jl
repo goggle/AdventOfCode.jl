@@ -1,7 +1,7 @@
 using AdventOfCode
 using Test
 
-@testset "AdventOfCode.jl" begin
+# @testset "AdventOfCode.jl" begin
     # Test each year that has solutions
     for year in AdventOfCode.YEARS
         year_test_file = joinpath(@__DIR__, string(year), "runtests.jl")
@@ -9,4 +9,4 @@ using Test
             include(year_test_file)
         end
     end
-end
+# end
