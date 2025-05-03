@@ -32,14 +32,14 @@ end
 
 Utility function to decode ASCII art images from problem solutions.
 """
-function generate_image(image)
+function generate_image(image; toblock='#', toempty='.')
     block = '\u2588'
     empty = ' '
     output = ""
     for i ∈ 1:size(image, 2)
         row = join(image[:, i])
-        row = replace(row, "#" => block)
-        row = replace(row, "." => empty)
+        row = replace(row, toblock => block)
+        row = replace(row, toempty => empty)
         output *= row * "\n"
     end
     return output
