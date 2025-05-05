@@ -1,9 +1,29 @@
 @testset "AOC2017" begin
     @testset "Day 1" begin
+        @test AOC2017.day01("1122") == [3, 0]
+        @test AOC2017.day01("1111") == [4, 4]
+        @test AOC2017.day01("1234") == [0, 0]
+        @test AOC2017.day01("91212129") == [9, 6]
+        @test AOC2017.day01("1212") == [0, 6]
+        @test AOC2017.day01("1221") == [3, 0]
+        @test AOC2017.day01("123425") == [0, 4]
+        @test AOC2017.day01("123123") == [0, 12]
+        @test AOC2017.day01("12131415") == [0, 4]
+
         @test AOC2017.day01() == [1182, 1152]
     end
     
     @testset "Day 2" begin
+        sample1 = "5\t1\t9\t5\n" *
+                  "7\t5\t3\n" *
+                  "2\t4\t6\t8\n"
+        @test AOC2017.day02(sample1) == [18, 7]
+
+        sample2 = "5\t9\t2\t8\n" *
+                 "9\t4\t7\t3\n" *
+                 "3\t8\t6\t5\n"
+        @test AOC2017.day02(sample1) == [18, 9]
+        
         @test AOC2017.day02() == [32121, 197]
     end
     
