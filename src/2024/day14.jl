@@ -12,7 +12,12 @@ function parse_input(input)
     reg = r"p=(-?\d+),(-?\d+)\s*v=(-?\d+),(-?\d+)"
     data = Vector{Int}[]
     for line ∈ eachsplit(rstrip(input), "\n")
-        push!(data, parse.(Int, match(reg, line).captures))
+        m = match(reg, line)
+        !isnothing(m) || error("Regex match failed for line: $line")
+        for (i, cap) in enumerate(m.captures)
+            !isnothing(cap) || error("Capture group $i is Nothing in match: $line")
+        end
+        push!(data, parse.(Int, [m.captures[1]::SubString{String}, m.captures[2]::SubString{String}, m.captures[3]::SubString{String}, m.captures[4]::SubString{String}]))
     end
     return data
 end

@@ -65,7 +65,7 @@ function swap_outputs!(rules::Vector{NTuple{4, String}}, i::Int, j::Int)
     return (rules[i][4], rules[j][4])
 end
 
-function parse_input_optimized(input::AbstractString)
+function parse_input_optimized(input::String)
     inits, rules = split(input, "\n\n")
     var_ids = Dict{String, Int}()
     current_id = 1
@@ -74,16 +74,20 @@ function parse_input_optimized(input::AbstractString)
     reg1 = r"([xy])(\d{2}):\s(\d)"
     x_bits = Dict{Int, Int}()
     y_bits = Dict{Int, Int}()
-    for line ∈ split(rstrip(inits), "\n")
+    for line in split(rstrip(inits), "\n")
         m = match(reg1, line)
-        var = m.captures[1] * m.captures[2]
-        get!(var_ids, var) do
+        !isnothing(m) || error("Invalid init line format: $line")
+        captures = m.captures
+        for (i, cap) in enumerate(captures)
+            !isnothing(cap) || error("Capture group $i is Nothing in line: $line")
+        end
+        var = captures[1]::SubString{String} * captures[2]::SubString{String}
+        id = get!(var_ids, var) do
             current_id += 1
         end
-        index = parse(Int, m.captures[2])
-        bit = parse(Int, m.captures[3])
-        id = var_ids[var]
-        if m.captures[1] == "x"
+        index = parse(Int, captures[2]::SubString{String})
+        bit = parse(Int, captures[3]::SubString{String})
+        if captures[1] == "x"
             x_bits[id] = index
             x += bit << index
         else
@@ -95,12 +99,21 @@ function parse_input_optimized(input::AbstractString)
     reg2 = r"([a-z0-9]+)\s+(AND|OR|XOR)\s+([a-z0-9]+)\s+->\s+([a-z0-9]+)"
     parsed_rules = NTuple{4, String}[]
     output_vars = String[]
-    for line ∈ split(rstrip(rules), "\n")
+    for line in split(rstrip(rules), "\n")
         m = match(reg2, line)
-        op, left, right, output = m.captures[2], m.captures[1], m.captures[3], m.captures[4]
+        !isnothing(m) || error("Invalid rule line format: $line")
+        captures = m.captures
+        for (i, cap) in enumerate(captures)
+            !isnothing(cap) || error("Capture group $i is Nothing in line: $line")
+        end
+        op = captures[2]::SubString{String}
+        left = captures[1]::SubString{String}
+        right = captures[3]::SubString{String}
+        output = captures[4]::SubString{String}
         for var in [left, right, output]
             get!(var_ids, var) do
                 current_id += 1
+                current_id::Int
             end
         end
         push!(parsed_rules, (op, left, right, output))
@@ -109,26 +122,26 @@ function parse_input_optimized(input::AbstractString)
 
     adjacency = Dict{String, Vector{String}}()
     in_degree = Dict{String, Int}()
-    for var ∈ output_vars
-        adjacency[var] = []
+    for var in output_vars
+        adjacency[var] = String[]
         in_degree[var] = 0
     end
 
-    for (_, left, right, output) ∈ parsed_rules
-        for input_var ∈ [left, right]
-            if input_var ∈ keys(in_degree)
+    for (_, left, right, output) in parsed_rules
+        for input_var in [left, right]
+            if input_var in keys(in_degree)
                 push!(adjacency[input_var], output)
                 in_degree[output] += 1
             end
         end
     end
 
-    queue = [var for var ∈ output_vars if in_degree[var] == 0]
+    queue = [var for var in output_vars if in_degree[var] == 0]
     top_order = String[]
     while !isempty(queue)
         var = popfirst!(queue)
         push!(top_order, var)
-        for neighbor ∈ adjacency[var]
+        for neighbor in adjacency[var]
             in_degree[neighbor] -= 1
             if in_degree[neighbor] == 0
                 push!(queue, neighbor)
@@ -136,8 +149,8 @@ function parse_input_optimized(input::AbstractString)
         end
     end
 
-    output_to_rule = Dict(var => i for (i, (_, _, _, var)) ∈ enumerate(parsed_rules))
-    ruleorder = [output_to_rule[var] for var ∈ top_order]
+    output_to_rule = Dict(var => i for (i, (_, _, _, var)) in enumerate(parsed_rules))
+    ruleorder = [output_to_rule[var] for var in top_order]
 
     z_outputs = String[]
     i = 0

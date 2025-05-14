@@ -13,10 +13,24 @@ function solve(data::Matrix{Int})
     return [p1, p2]
 end
 
-function score(data::Matrix{Int}, pos::CartesianIndex{2}, goals::Union{Set{CartesianIndex{2}},Vector{CartesianIndex{2}}})
+function score(data::Matrix{Int}, pos::CartesianIndex{2}, goals::Set{CartesianIndex{2}})
     if data[pos] == 9
         push!(goals, pos)
-        return
+        return 0
+    end
+    for npos ∈ (CartesianIndex(pos.I .+ x) for x ∈ ((1,0), (-1,0), (0,1), (0,-1)))
+        !checkbounds(Bool, data, npos) && continue
+        if data[pos] + 1 == data[npos]
+            score(data, npos, goals)
+        end
+    end
+    data[pos] == 0 && return length(goals)
+end
+
+function score(data::Matrix{Int}, pos::CartesianIndex{2}, goals::Vector{CartesianIndex{2}})
+    if data[pos] == 9
+        push!(goals, pos)
+        return 0
     end
     for npos ∈ (CartesianIndex(pos.I .+ x) for x ∈ ((1,0), (-1,0), (0,1), (0,-1)))
         !checkbounds(Bool, data, npos) && continue

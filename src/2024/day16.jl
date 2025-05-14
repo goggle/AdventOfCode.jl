@@ -6,10 +6,12 @@ function day16(input::String = readInput(joinpath(@__DIR__, "..", "..", "data", 
     data = stack(split(rstrip(input), '\n')) |> permutedims
     passable = data .!= '#'
     startpos = findfirst(==('S'), data)
+    !isnothing(startpos) || error("No 'S' found in matrix.")
     nrows, ncols = size(data)
 
     dist, prev = dijkstra(passable, startpos, nrows, ncols)
     endpos = findfirst(==('E'), data)
+    !isnothing(endpos) || error("No 'E' found in matrix.")
     p1 = minimum(dist[endpos[1], endpos[2], dir] for dir in 1:4)
 
     # Collect end positions with minimal distance

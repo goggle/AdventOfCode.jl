@@ -30,6 +30,7 @@ function _to_dir(c::Char)
     c == '^' && return CartesianIndex(-1, 0)
     c == '>' && return CartesianIndex(0, 1)
     c == '<' && return CartesianIndex(0, -1)
+    error("Invalid direction character: $c")
 end
 
 function total_gps(world::Matrix{Char})
@@ -40,7 +41,7 @@ function total_gps(world::Matrix{Char})
     return total
 end
 
-function execute_instructions!(world, instructions)
+function execute_instructions!(world::Matrix{Char}, instructions::String)
     current = findall(x -> x == '@', world)[1]
     world[current] = '.'
     for (k, instruction) ∈ instructions |> enumerate        

@@ -10,6 +10,7 @@ function time_to_end(data::Matrix{Char})
     rows, cols = size(data)
     tte = fill(-1, rows, cols)
     goal = findfirst(==('E'), data)
+    !isnothing(goal) || error("No 'E' found in matrix.")
     queue = Deque{CartesianIndex{2}}()
     push!(queue, goal)
     tte[goal] = 0

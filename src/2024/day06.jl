@@ -61,6 +61,4 @@ end
 
 const DIRS = [(-1,0), (0,1), (1,0), (0,-1)]  # N, E, S, W
 
-function turn_right(d::Int)
-    return mod1(d + 1, 4)
-end
+turn_right(d::Int) = mod1(d + 1, 4)

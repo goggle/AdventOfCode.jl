@@ -43,11 +43,8 @@ function find_sequence(registers, instructions)
         return false
     end
 
-    if try_next_value()
-        return sequence
-    else
-        return nothing
-    end
+    try_next_value()
+    return sequence
 end
 
 function parse_input(input)
