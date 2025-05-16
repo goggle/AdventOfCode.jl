@@ -57,6 +57,7 @@ end
 
 @inline function generate_offsets(max_dist::Int)
     offsets = Tuple{Int,Int}[]
+    sizehint!(offsets, (max_dist + 1)^2 * 4)
     for d in 0:max_dist
         for i in 0:d
             j = d - i
