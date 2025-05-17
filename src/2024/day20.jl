@@ -14,20 +14,17 @@ function time_to_end(data::Matrix{Char})
     queue = Deque{CartesianIndex{2}}()
     push!(queue, goal)
     tte[goal] = 0
-    time = 1
     
     while !isempty(queue)
-        for _ in 1:length(queue)
-            elem = popfirst!(queue)
-            for dir in (CartesianIndex(-1, 0), CartesianIndex(1, 0), CartesianIndex(0, -1), CartesianIndex(0, 1))
-                neigh = elem + dir
-                if checkbounds(Bool, data, neigh) && data[neigh] != '#' && tte[neigh] == -1
-                    tte[neigh] = time
-                    push!(queue, neigh)
-                end
+        elem = popfirst!(queue)
+        current_time = tte[elem]
+        for dir in (CartesianIndex(-1, 0), CartesianIndex(1, 0), CartesianIndex(0, -1), CartesianIndex(0, 1))
+            neigh = elem + dir
+            if checkbounds(Bool, data, neigh) && data[neigh] != '#' && tte[neigh] == -1
+                tte[neigh] = current_time + 1
+                push!(queue, neigh)
             end
         end
-        time += 1
     end
     return tte
 end
