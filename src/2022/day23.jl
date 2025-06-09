@@ -1,80 +1,97 @@
 function day23(input::String = readInput(joinpath(@__DIR__, "..", "..", "data", "day23.txt")))
-    elvesmap = map(x -> x[1], reduce(vcat, permutedims.(map(x -> split(x, ""), split(input)))))
-    elves = Set(findall(x -> x == '#', elvesmap))
-
-    for r ∈ 1:10
-        elves, _ = round!(elves, r)
-    end
-    mini = minimum(x[1] for x ∈ elves)
-    maxi = maximum(x[1] for x ∈ elves)
-    minj = minimum(x[2] for x ∈ elves)
-    maxj = maximum(x[2] for x ∈ elves)
-    p1 = (maxi - mini + 1) * (maxj - minj + 1) - length(elves)
-
-    p2 = 11
-    while true
-        _, moved = round!(elves, p2)
-        !moved && break
-        p2 += 1
-    end
-
-    return [p1, p2]
-end
-
-function round!(elves::Set{CartesianIndex{2}}, roundnumber::Int)
-    dir = Dict(
-        "NW" => CartesianIndex(-1, -1),
-        "N" => CartesianIndex(-1, 0),
-        "NE" => CartesianIndex(-1, 1),
-        "E" => CartesianIndex(0, 1),
-        "SE" => CartesianIndex(1, 1),
-        "S" => CartesianIndex(1, 0),
-        "SW" => CartesianIndex(1, -1),
-        "W" => CartesianIndex(0, -1),
-    )
-    order = Dict(
-        1 => ("N", "NE", "NW"),
-        2 => ("S", "SE", "SW"),
-        3 => ("W", "NW", "SW"),
-        4 => ("E", "NE", "SE"),
-    )
-
-    fromto = Dict{CartesianIndex{2}, CartesianIndex{2}}()
-    for elf ∈ elves
-        if considers_moving(elves, elf)
-            for i ∈ mod1.(roundnumber:roundnumber+3, 4)
-                if elf + dir[order[i][1]] ∉ elves && elf + dir[order[i][2]] ∉ elves && elf + dir[order[i][3]] ∉ elves
-                    fromto[elf] = elf + dir[order[i][1]]
-                    break
-                end
+    lines = split(strip(input), '\n')
+    elves = Set{Tuple{Int,Int}}()
+    
+    for (i, line) in enumerate(lines)
+        for (j, char) in enumerate(line)
+            if char == '#'
+                push!(elves, (i, j))
             end
         end
     end
-
-    nmoves = 0
-    for (from, to) ∈ fromto
-        if to ∈ elves
-            push!(elves, to + to - from)
-            delete!(elves, to)
-            nmoves -= 1
-        else
-            push!(elves, to)
-            delete!(elves, from)
-            nmoves += 1
-        end
+    
+    # Part 1: 10 rounds
+    elves_copy = copy(elves)
+    for r in 1:10
+        elves_copy, _ = round!(elves_copy, r)
     end
-
-    return elves, nmoves > 0
+    
+    mini = minimum(x[1] for x in elves_copy)
+    maxi = maximum(x[1] for x in elves_copy)
+    minj = minimum(x[2] for x in elves_copy)
+    maxj = maximum(x[2] for x in elves_copy)
+    p1 = (maxi - mini + 1) * (maxj - minj + 1) - length(elves_copy)
+    
+    # Part 2: Find equilibrium
+    p2 = 1
+    while true
+        elves, moved = round!(elves, p2)
+        if !moved
+            break
+        end
+        p2 += 1
+    end
+    
+    return [p1, p2]
 end
 
-function considers_moving(s::Set{CartesianIndex{2}}, c::CartesianIndex{2})
-    c + CartesianIndex(-1, -1) ∈ s && return true
-    c + CartesianIndex(-1, 0) ∈ s && return true
-    c + CartesianIndex(-1, 1) ∈ s && return true
-    c + CartesianIndex(0, -1) ∈ s && return true
-    c + CartesianIndex(0, 1) ∈ s && return true
-    c + CartesianIndex(1, -1) ∈ s && return true
-    c + CartesianIndex(1, 0) ∈ s && return true
-    c + CartesianIndex(1, 1) ∈ s && return true
+const DIRECTIONS = (
+    (-1, -1), (-1, 0), (-1, 1),  # N row: NW, N, NE
+    (1, -1), (1, 0), (1, 1),     # S row: SW, S, SE  
+    (-1, -1), (0, -1), (1, -1),  # W col: NW, W, SW
+    (-1, 1), (0, 1), (1, 1)      # E col: NE, E, SE
+)
+
+const MOVE_DIRECTIONS = ((-1, 0), (1, 0), (0, -1), (0, 1))  # N, S, W, E
+
+function round!(elves::Set{Tuple{Int,Int}}, roundnumber::Int)
+    # First phase: determine proposed moves
+    proposals = Dict{Tuple{Int,Int}, Vector{Tuple{Int,Int}}}()
+    
+    for elf in elves
+        if !considers_moving(elves, elf)
+            continue
+        end
+        
+        for i in 0:3
+            dir_idx = mod1(roundnumber + i, 4)
+            base_idx = (dir_idx - 1) * 3
+            
+            if (!((elf[1] + DIRECTIONS[base_idx + 1][1], elf[2] + DIRECTIONS[base_idx + 1][2]) in elves) &&
+                !((elf[1] + DIRECTIONS[base_idx + 2][1], elf[2] + DIRECTIONS[base_idx + 2][2]) in elves) &&
+                !((elf[1] + DIRECTIONS[base_idx + 3][1], elf[2] + DIRECTIONS[base_idx + 3][2]) in elves))
+                
+                new_pos = (elf[1] + MOVE_DIRECTIONS[dir_idx][1], elf[2] + MOVE_DIRECTIONS[dir_idx][2])
+                
+                if !haskey(proposals, new_pos)
+                    proposals[new_pos] = Tuple{Int,Int}[]
+                end
+                push!(proposals[new_pos], elf)
+                break
+            end
+        end
+    end
+    
+    # Second phase: execute valid moves
+    moved = false
+    for (new_pos, proposing_elves) in proposals
+        if length(proposing_elves) == 1
+            old_pos = proposing_elves[1]
+            delete!(elves, old_pos)
+            push!(elves, new_pos)
+            moved = true
+        end
+    end
+    
+    return elves, moved
+end
+
+@inline function considers_moving(elves::Set{Tuple{Int,Int}}, elf::Tuple{Int,Int})
+    for di in -1:1, dj in -1:1
+        if di == 0 && dj == 0
+            continue
+        end
+        (elf[1] + di, elf[2] + dj) ∈ elves && return true
+    end
     return false
 end
